@@ -41,7 +41,7 @@ menuButton.rx.tap
 
 ### 1. Defining an Alert Action
 
-AlertReactor provides a `AlertActionType ` protocol. This is an abstraction model of `UIAlertAction`. Create a new type conforming this protocol. This protocol requires a `title` and `style` property.
+AlertReactor provides an `AlertActionType ` protocol. This is an abstraction model of `UIAlertAction`. Create a new type and make it conform to this protocol. This protocol requires a `title` and `style` property.
 
 ```swift
 enum UserAlertAction: AlertActionType {
@@ -74,24 +74,26 @@ enum UserAlertAction: AlertActionType {
 `AlertReactor` is a reactor class. It has an action, mutation and state:
 
 ```swift
-enum Action {
-  case prepare
-}
+class AlertReactor<AlertAction: AlertActionType>: Reactor {
+  enum Action {
+    case prepare
+  }
 
-enum Mutation {
-  case setTitle(String?)
-  case setMessage(String?)
-  case setActions([AlertAction])
-}
+  enum Mutation {
+    case setTitle(String?)
+    case setMessage(String?)
+    case setActions([AlertAction])
+  }
 
-struct State {
-  public var title: String?
-  public var message: String?
-  public var actions: [AlertAction]
+  struct State {
+    public var title: String?
+    public var message: String?
+    public var actions: [AlertAction]
+  }
 }
 ```
 
-Override this class to implement `mutate(action:)` method so that the reactor can emit mutations to change the state. Here is an example of lazy-loaded actions.
+Subclass this class to override `mutate(action:)` method so that the reactor can emit mutations to change the state. Here is an example implementation of lazy-loaded actions.
 
 ```swift
 final class UserAlertReactor: AlertReactor<UserAlertAction> {
@@ -107,7 +109,7 @@ final class UserAlertReactor: AlertReactor<UserAlertAction> {
       Observable.just(Mutation.setTitle("Loading...")),
       Observable.just(Mutation.setActions([.block, .cancel])),
 
-      // Call API to choose follow or unfollow
+      // Call API to choose an action: follow or unfollow
       api.isFollowing(userID: userID)
         .map { isFollowing -> Mutation in
           if isFollowing {
@@ -124,7 +126,7 @@ final class UserAlertReactor: AlertReactor<UserAlertAction> {
 
 ### 3. Using with Alert Controller
 
-A generic class `AlertController` is provided. You can create it with some parameters: `reactor` and `preferredStyle`. There's also a `actionSelected` control event property in a reactive extension.
+`AlertController` is a subclass of `UIAlertController` which is conforming to a `View` protocol. You can initialize this class with a generic alert action type and some parameters: `reactor` and `preferredStyle`. There's also an `actionSelected` property in a reactive extension.
 
 ```swift
 let reactor = UserAlertReactor(userID: 12345)
