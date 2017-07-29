@@ -42,9 +42,7 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
     defer { self.reactor = reactor }
     self._preferredStyle = preferredStyle
     super.init(nibName: nil, bundle: nil)
-//    if case .alert = preferredStyle {
-      self.title = ""
-//    }
+    self.title = ""
   }
 
   public required init?(coder aDecoder: NSCoder) {
