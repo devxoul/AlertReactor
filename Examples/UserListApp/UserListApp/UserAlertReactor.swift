@@ -20,32 +20,27 @@ final class UserAlertReactor: AlertReactor<UserAlertAction> {
     switch action {
     case .prepare:
       return Observable.concat([
-        Observable.just(.setTitle("Loading...")),
-        Observable.just(.setMessage("Wait for a second")),
-        Observable.just(.setActions([.cancel])),
+        Observable.just(.setActions([.copy, .loading, .block, .cancel])),
         UserService.isFollowing(userID: self.userID)
           .map { isFollowing -> [UserAlertAction] in
-            if !isFollowing {
-              return [.follow, .cancel]
-            } else {
-              return [.unfollow, .cancel]
-            }
+            let followOrUnfollow: UserAlertAction = !isFollowing ? .follow : .unfollow
+            return [.copy, followOrUnfollow, .block, .cancel]
           }
-          .flatMap { actions -> Observable<Mutation> in
-            Observable.concat([
-              Observable.just(.setActions(actions)),
-              Observable.just(.setTitle("Select an action")),
-              Observable.just(.setMessage(nil)),
-            ])
-          },
+          .map(Mutation.setActions),
       ])
 
     case let .selectAction(alertAction):
       switch alertAction {
+      case .loading:
+        return .empty()
+      case .copy:
+        return .empty()
       case .follow:
         return UserService.follow(userID: self.userID).flatMap(Observable.empty)
       case .unfollow:
         return UserService.unfollow(userID: self.userID).flatMap(Observable.empty)
+      case .block:
+        return .empty()
       case .cancel:
         return .empty()
       }
