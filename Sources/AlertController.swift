@@ -115,8 +115,8 @@ extension Reactive where Base: AlertControllerType {
       guard !(alertController.actions.isEmpty && actions.isEmpty) else { return }
 
       // [AlertActionType] -> [UIAlertAction]
-      let alertActions = actions.map { action in
-        UIAlertAction(title: action.title, style: action.style) { [weak base = self.base] _ in
+      let alertActions = actions.map { action -> UIAlertAction in
+        UIAlertAction(action: action) { [weak base = self.base] action in
           base?._actionSelectedSubject.onNext(action)
         }
       }
