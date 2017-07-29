@@ -1,0 +1,9 @@
+platform :ios, '9.0'
+
+target 'UserListApp' do
+  use_frameworks!
+  pod 'AlertReactor', :path => '../../'
+  pod 'ReactorKit'
+  pod 'RxSwift'
+  pod 'RxCocoa'
+end
