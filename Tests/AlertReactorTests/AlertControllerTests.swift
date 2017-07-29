@@ -4,7 +4,27 @@ import RxTest
 import AlertReactor
 
 class AlertControllerTests: XCTestCase {
-  func testController() {
+  func testState_title() {
+    let reactor = AlertReactor<MyAlertAction>()
+    reactor.stub.isEnabled = true
+
+    let controller = AlertController<MyAlertAction>(reactor: reactor)
+    _ = controller.view
+    reactor.stub.state.value.title = "Hello"
+    XCTAssertEqual(controller.title, "Hello")
+  }
+
+  func testState_message() {
+    let reactor = AlertReactor<MyAlertAction>()
+    reactor.stub.isEnabled = true
+
+    let controller = AlertController<MyAlertAction>(reactor: reactor)
+    _ = controller.view
+    reactor.stub.state.value.message = "Choose an item"
+    XCTAssertEqual(controller.message, "Choose an item")
+  }
+
+  func testState_actions() {
     let reactor = AlertReactor<MyAlertAction>()
     reactor.stub.isEnabled = true
 
