@@ -2,9 +2,10 @@ import ReactorKit
 import RxSwift
 
 open class AlertReactor<AlertAction: AlertActionType>: Reactor {
-  public typealias Action = _Action
-  public enum _Action {
+  public typealias Action = _Action<AlertAction>
+  public enum _Action<AlertAction: AlertActionType> {
     case prepare
+    case selectAction(AlertAction)
   }
 
   public typealias Mutation = _Mutation<AlertAction>

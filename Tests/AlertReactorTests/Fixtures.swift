@@ -44,6 +44,9 @@ final class MyAlertReactor: AlertReactor<MyAlertAction> {
         Observable.just(.setActions([.edit, .delete, .cancel])).delay(100, scheduler: self.scheduler),
         Observable.just(.setActions([.edit, .share, .delete, .cancel])).delay(100, scheduler: self.scheduler),
       ])
+
+    case .selectAction:
+      return .empty()
     }
   }
 }

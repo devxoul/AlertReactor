@@ -55,6 +55,11 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.rx.actionSelected
+      .map(Reactor.Action.selectAction)
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.title }
       .distinctUntilChanged { $0 == $1 }
