@@ -5,7 +5,9 @@
 [![Build Status](https://travis-ci.org/devxoul/AlertReactor.svg?branch=master)](https://travis-ci.org/devxoul/AlertReactor)
 [![Codecov](https://img.shields.io/codecov/c/github/devxoul/AlertReactor.svg)](https://codecov.io/gh/devxoul/AlertReactor)
 
-ReactorKit extension for UIAlertController. It provides an elegant way to deal with an UIAlertController. Best fits for lazy-loaded alert actions.
+AlertReactor is a ReactorKit extension for UIAlertController. It provides an elegant way to deal with an UIAlertController. Best fits for lazy-loaded alert actions.
+
+![alertreactor](https://user-images.githubusercontent.com/931655/28743883-e0859fc6-748f-11e7-8c02-ad0602b27713.png)
 
 ## Features
 
@@ -36,6 +38,8 @@ menuButton.rx.tap
   .filterNil()
   .bind(to: reactor.action)
 ```
+
+Or you can make `UserAlertReactor` to handle those actions.
 
 ## Getting Started
 
@@ -76,7 +80,8 @@ enum UserAlertAction: AlertActionType {
 ```swift
 class AlertReactor<AlertAction: AlertActionType>: Reactor {
   enum Action {
-    case prepare
+    case prepare // on viewDidLoad()
+    case selectAction(AlertAction) // on select action
   }
 
   enum Mutation {
@@ -104,22 +109,29 @@ final class UserAlertReactor: AlertReactor<UserAlertAction> {
   }
 
   override func mutate(action: Action) -> Observable<Mutation> {
-    return Observable.concat([
-      // Initial actions
-      Observable.just(Mutation.setTitle("Loading...")),
-      Observable.just(Mutation.setActions([.block, .cancel])),
+    switch action {
+    case .prepare:
+      return Observable.concat([
+        // Initial actions
+        Observable.just(Mutation.setTitle("Loading...")),
+        Observable.just(Mutation.setActions([.block, .cancel])),
 
-      // Call API to choose an action: follow or unfollow
-      api.isFollowing(userID: userID)
-        .map { isFollowing -> Mutation in
-          if isFollowing {
-            return Mutation.setActions([.unfollow, .block, .cancel])
-          } else {
-            return Mutation.setActions([.follow, .block, .cancel])
+        // Call API to choose an action: follow or unfollow
+        api.isFollowing(userID: userID)
+          .map { isFollowing -> Mutation in
+            if isFollowing {
+              return Mutation.setActions([.unfollow, .block, .cancel])
+            } else {
+              return Mutation.setActions([.follow, .block, .cancel])
+            }
           }
-        }
-      Observable.just(Mutation.setTitle(nil)),
-    ])
+        Observable.just(Mutation.setTitle(nil)),
+      ])
+
+    case let .selectAction(alertAction):
+      print("Select: \(alertAction)")
+      return Observable.empty()
+    }
   }
 }
 ```
