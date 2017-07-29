@@ -19,7 +19,7 @@ open class AlertReactor<AlertAction: AlertActionType>: Reactor {
   public struct _State<AlertAction: AlertActionType> {
     public var title: String?
     public var message: String?
-    public var actions: [AlertAction] = []
+    public var actions: [AlertAction]
   }
 
   open let initialState: State

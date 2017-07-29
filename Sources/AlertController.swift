@@ -9,7 +9,11 @@ import RxSwift
 
 public protocol AlertControllerType: class {
   associatedtype AlertAction: AlertActionType
+
   var _actionSelectedSubject: PublishSubject<AlertAction> { get }
+  var actions: [UIAlertAction] { get }
+
+  func addAction(_ action: UIAlertAction)
   func setValue(_ value: Any?, forKey key: String)
 }
 
@@ -35,10 +39,12 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
   // MARK: Initializing
 
   public init(reactor: AlertReactor<AlertAction>? = nil, preferredStyle: UIAlertControllerStyle = .alert) {
+    defer { self.reactor = reactor }
     self._preferredStyle = preferredStyle
     super.init(nibName: nil, bundle: nil)
-    self.title = ""
-    self.reactor = reactor
+//    if case .alert = preferredStyle {
+      self.title = ""
+//    }
   }
 
   public required init?(coder aDecoder: NSCoder) {
@@ -81,6 +87,16 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
       }
       .bind(to: self.rx.actions)
       .disposed(by: self.disposeBag)
+
+    reactor.state
+      .subscribe(onNext: { [weak self] _ in
+        guard let view = self?.view else { return }
+        let selector = NSSelectorFromString("_contentSizeChanged")
+        if view.responds(to: selector) {
+          _ = view.perform(selector)
+        }
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 
@@ -88,19 +104,43 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
 // MARK: - Reactive Extension
 
 extension Reactive where Base: AlertControllerType {
+  var actionSelected: ControlEvent<Base.AlertAction> {
+    let source = self.base._actionSelectedSubject.asObservable()
+    return ControlEvent(events: source)
+  }
+
   var actions: UIBindingObserver<Base, [Base.AlertAction]> {
     return UIBindingObserver(UIElement: self.base) { alertController, actions in
+      // do nothing if both old actions and new actions are empty
+      guard !(alertController.actions.isEmpty && actions.isEmpty) else { return }
+
+      // [AlertActionType] -> [UIAlertAction]
       let alertActions = actions.map { action in
         UIAlertAction(title: action.title, style: action.style) { [weak base = self.base] _ in
           base?._actionSelectedSubject.onNext(action)
         }
       }
+
+      // prepare action views
+      self.prepareActionViews(with: alertActions, for: .default)
+      self.prepareActionViews(with: alertActions, for: .cancel)
+      self.prepareActionViews(with: alertActions, for: .destructive)
+
+      // set actions
       alertController.setValue(alertActions, forKey: "actions")
     }
   }
 
-  var actionSelected: ControlEvent<Base.AlertAction> {
-    let source = self.base._actionSelectedSubject.asObservable()
-    return ControlEvent(events: source)
+  private func prepareActionViews(with newActions: [UIAlertAction], for style: UIAlertActionStyle) {
+    let oldActions = self.base.actions
+    let oldCount = oldActions.filter { $0.style == style }.count
+    let newCount = newActions.filter { $0.style == style }.count
+    let diff = newCount - oldCount
+    if diff > 0 {
+      for _ in 0..<diff {
+        let placeholderAction = UIAlertAction(title: "", style: style, handler: nil)
+        self.base.addAction(placeholderAction)
+      }
+    }
   }
 }
