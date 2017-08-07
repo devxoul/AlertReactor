@@ -102,12 +102,12 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
 // MARK: - Reactive Extension
 
 extension Reactive where Base: AlertControllerType {
-  var actionSelected: ControlEvent<Base.AlertAction> {
+  public var actionSelected: ControlEvent<Base.AlertAction> {
     let source = self.base._actionSelectedSubject.asObservable()
     return ControlEvent(events: source)
   }
 
-  var actions: UIBindingObserver<Base, [Base.AlertAction]> {
+  public var actions: UIBindingObserver<Base, [Base.AlertAction]> {
     return UIBindingObserver(UIElement: self.base) { alertController, actions in
       // do nothing if both old actions and new actions are empty
       guard !(alertController.actions.isEmpty && actions.isEmpty) else { return }
