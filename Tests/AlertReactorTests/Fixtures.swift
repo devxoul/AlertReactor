@@ -1,3 +1,4 @@
+#if os(iOS) || os(tvOS)
 import UIKit
 import RxSwift
 import AlertReactor
@@ -50,3 +51,4 @@ final class MyAlertReactor: AlertReactor<MyAlertAction> {
     }
   }
 }
+#endif

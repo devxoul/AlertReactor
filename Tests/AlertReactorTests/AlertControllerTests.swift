@@ -1,3 +1,4 @@
+#if os(iOS) || os(tvOS)
 import XCTest
 import RxExpect
 import RxTest
@@ -56,3 +57,4 @@ class AlertControllerTests: XCTestCase {
     XCTAssertEqual(controller.actions[3].style, .cancel)
   }
 }
+#endif
