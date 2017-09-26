@@ -1,3 +1,4 @@
+#if os(iOS) || os(tvOS)
 import UIKit
 
 public protocol AlertActionType: Equatable {
@@ -22,3 +23,4 @@ public extension UIAlertAction {
     self.isEnabled = action.isEnabled
   }
 }
+#endif

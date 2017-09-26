@@ -1,3 +1,4 @@
+#if os(iOS) || os(tvOS)
 import ReactorKit
 import RxSwift
 
@@ -62,3 +63,4 @@ open class AlertReactor<AlertAction: AlertActionType>: Reactor {
     return state
   }
 }
+#endif
