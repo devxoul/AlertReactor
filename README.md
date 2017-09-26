@@ -1,6 +1,6 @@
 # AlertReactor
 
-![Swift](https://img.shields.io/badge/Swift-3.1-orange.svg)
+![Swift](https://img.shields.io/badge/Swift-4.0-orange.svg)
 [![CocoaPods](http://img.shields.io/cocoapods/v/AlertReactor.svg)](https://cocoapods.org/pods/AlertReactor)
 [![Build Status](https://travis-ci.org/devxoul/AlertReactor.svg?branch=master)](https://travis-ci.org/devxoul/AlertReactor)
 [![Codecov](https://img.shields.io/codecov/c/github/devxoul/AlertReactor.svg)](https://codecov.io/gh/devxoul/AlertReactor)
