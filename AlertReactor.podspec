@@ -10,12 +10,8 @@ Pod::Spec.new do |s|
   s.source_files = "Sources/**/*.{swift,h,m}"
   s.frameworks   = "UIKit"
   s.dependency "ReactorKit"
-  s.dependency "RxSwift", ">= 3.0.0"
-  s.dependency "RxCocoa", ">= 3.0.0"
+  s.dependency "RxSwift", ">= 4.0.0"
+  s.dependency "RxCocoa", ">= 4.0.0"
 
   s.ios.deployment_target = "8.0"
-
-  s.pod_target_xcconfig = {
-    "SWIFT_VERSION" => "3.1"
-  }
 end

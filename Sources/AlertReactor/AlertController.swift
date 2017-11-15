@@ -1,3 +1,4 @@
+#if os(iOS) || os(tvOS)
 import UIKit
 
 import ReactorKit
@@ -107,8 +108,8 @@ extension Reactive where Base: AlertControllerType {
     return ControlEvent(events: source)
   }
 
-  public var actions: UIBindingObserver<Base, [Base.AlertAction]> {
-    return UIBindingObserver(UIElement: self.base) { alertController, actions in
+  public var actions: Binder<[Base.AlertAction]> {
+    return Binder(self.base) { alertController, actions in
       // do nothing if both old actions and new actions are empty
       guard !(alertController.actions.isEmpty && actions.isEmpty) else { return }
 
@@ -142,3 +143,4 @@ extension Reactive where Base: AlertControllerType {
     }
   }
 }
+#endif
