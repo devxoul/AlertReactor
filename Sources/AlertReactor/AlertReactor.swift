@@ -23,7 +23,7 @@ open class AlertReactor<AlertAction: AlertActionType>: Reactor {
     public var actions: [AlertAction]
   }
 
-  open let initialState: State
+  public let initialState: State
 
   public init(title: String? = nil, message: String? = nil, actions: [AlertAction]? = nil) {
     self.initialState = State(title: title, message: message, actions: actions ?? [])
