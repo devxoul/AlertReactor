@@ -18,7 +18,7 @@ enum MyAlertAction: AlertActionType {
     }
   }
 
-  var style: UIAlertActionStyle {
+  var style: UIAlertAction.Style {
     switch self {
     case .edit: return .default
     case .share: return .default

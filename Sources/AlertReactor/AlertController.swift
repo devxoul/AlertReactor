@@ -30,8 +30,8 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
   open var disposeBag = DisposeBag()
   public private(set) lazy var _actionSelectedSubject: PublishSubject<AlertAction> = .init()
 
-  private var _preferredStyle: UIAlertControllerStyle
-  open override var preferredStyle: UIAlertControllerStyle {
+  private var _preferredStyle: UIAlertController.Style
+  open override var preferredStyle: UIAlertController.Style {
     get { return self._preferredStyle }
     set { self._preferredStyle = newValue }
   }
@@ -39,7 +39,7 @@ open class AlertController<A: AlertActionType>: UIAlertController, AlertControll
 
   // MARK: Initializing
 
-  public init(reactor: AlertReactor<AlertAction>? = nil, preferredStyle: UIAlertControllerStyle = .alert) {
+  public init(reactor: AlertReactor<AlertAction>? = nil, preferredStyle: UIAlertController.Style = .alert) {
     defer { self.reactor = reactor }
     self._preferredStyle = preferredStyle
     super.init(nibName: nil, bundle: nil)
@@ -130,7 +130,7 @@ extension Reactive where Base: AlertControllerType {
     }
   }
 
-  private func prepareActionViews(with newActions: [UIAlertAction], for style: UIAlertActionStyle) {
+  private func prepareActionViews(with newActions: [UIAlertAction], for style: UIAlertAction.Style) {
     let oldActions = self.base.actions
     let oldCount = oldActions.filter { $0.style == style }.count
     let newCount = newActions.filter { $0.style == style }.count

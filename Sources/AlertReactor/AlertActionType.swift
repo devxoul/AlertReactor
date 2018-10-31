@@ -3,12 +3,12 @@ import UIKit
 
 public protocol AlertActionType: Equatable {
   var title: String { get }
-  var style: UIAlertActionStyle { get }
+  var style: UIAlertAction.Style { get }
   var isEnabled: Bool { get }
 }
 
 public extension AlertActionType {
-  var style: UIAlertActionStyle {
+  var style: UIAlertAction.Style {
     return .default
   }
 
