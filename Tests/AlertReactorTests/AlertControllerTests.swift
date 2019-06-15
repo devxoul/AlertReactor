@@ -7,7 +7,7 @@ import AlertReactor
 class AlertControllerTests: XCTestCase {
   func testState_title() {
     let reactor = AlertReactor<MyAlertAction>()
-    reactor.stub.isEnabled = true
+    reactor.isStubEnabled = true
 
     let controller = AlertController<MyAlertAction>(reactor: reactor)
     _ = controller.view
@@ -17,7 +17,7 @@ class AlertControllerTests: XCTestCase {
 
   func testState_message() {
     let reactor = AlertReactor<MyAlertAction>()
-    reactor.stub.isEnabled = true
+    reactor.isStubEnabled = true
 
     let controller = AlertController<MyAlertAction>(reactor: reactor)
     _ = controller.view
@@ -27,7 +27,7 @@ class AlertControllerTests: XCTestCase {
 
   func testState_actions() {
     let reactor = AlertReactor<MyAlertAction>()
-    reactor.stub.isEnabled = true
+    reactor.isStubEnabled = true
 
     let controller = AlertController<MyAlertAction>(reactor: reactor)
     _ = controller.view
