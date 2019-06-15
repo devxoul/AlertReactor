@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
   s.dependency "ReactorKit"
   s.dependency "RxSwift", ">= 4.0.0"
   s.dependency "RxCocoa", ">= 4.0.0"
+  s.swift_version = "5.0"
 
   s.ios.deployment_target = "8.0"
 end
