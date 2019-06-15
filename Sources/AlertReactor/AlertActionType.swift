@@ -18,7 +18,7 @@ public extension AlertActionType {
 }
 
 public extension UIAlertAction {
-  public convenience init<Action: AlertActionType>(action: Action, handler: ((Action) -> Void)? = nil) {
+  convenience init<Action: AlertActionType>(action: Action, handler: ((Action) -> Void)? = nil) {
     self.init(title: action.title, style: action.style) { _ in handler?(action) }
     self.isEnabled = action.isEnabled
   }

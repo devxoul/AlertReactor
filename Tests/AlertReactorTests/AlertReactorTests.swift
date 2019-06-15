@@ -9,7 +9,7 @@ class AlertReactorTests: XCTestCase {
     let test = RxExpect()
     let reactor = MyAlertReactor(scheduler: test.scheduler)
     test.retain(reactor)
-    test.input(reactor.action, [next(100, .prepare)])
+    test.input(reactor.action, [.next(100, .prepare)])
     test.assert(reactor.state.map { $0.actions }) { events in
       XCTAssertEqual(events.elements.count, 5)
       XCTAssertEqual(events.elements[0], [])
