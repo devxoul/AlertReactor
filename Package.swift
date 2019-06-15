@@ -1,9 +1,12 @@
-// swift-tools-version:4.2
+// swift-tools-version:5.0
 
 import PackageDescription
 
 let package = Package(
   name: "AlertReactor",
+  platforms: [
+    .iOS(.v8)
+  ],
   products: [
     .library(name: "AlertReactor", targets: ["AlertReactor"]),
   ],
