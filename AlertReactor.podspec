@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "AlertReactor"
-  s.version          = "0.5.0"
+  s.version          = "0.6.0"
   s.summary          = "ReactorKit extension for UIAlertController"
   s.homepage         = "https://github.com/devxoul/AlertReactor"
   s.license          = { :type => "MIT", :file => "LICENSE" }
